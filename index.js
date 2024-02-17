@@ -1,8 +1,10 @@
 
+
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -21,23 +23,21 @@ app.use(express.json());
 
 // MongoDB setup
 const PORT = process.env.PORT || 3001;
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-}) .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error connecting to the database', error);
+
+// Log the MongoDB URI to ensure it's correctly loaded from environment variables
+console.log("MongoDB URI:", process.env.MONGODB_URI);
+
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
+})
+.catch((error) => {
+  console.error('Error connecting to the database', error);
+});
 
-
-
-
-  
 /*
 // Server-side code to handle typing indicators
 socket.on('typing', (username) => {
